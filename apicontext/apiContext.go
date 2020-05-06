@@ -18,7 +18,7 @@ type APIContext struct {
 	UserID    string // User Id
 	UserName  string // Username against the token
 	Email     string //Email against the token
-	Role      string //Role of the user
+	RoleID    string //Role of the user
 }
 
 // CustomContext is the combination of native context and APIContext

@@ -3,6 +3,7 @@ package main
 import (
 	"project/project-viewMore/apicontext"
 	"project/project-viewMore/loglib"
+	"project/project-viewMore/server"
 )
 
 const (
@@ -10,5 +11,12 @@ const (
 )
 
 func main() {
-	loglib.GenericInfo(apicontext.CustomContext{}, "STARTING VIEWMORE SERVER, VERSION: "+version, nil)
+	m := loglib.FieldsMap{
+		"Port":     server.Port,
+		"SubRoute": server.SubRoute,
+	}
+
+	loglib.GenericInfo(apicontext.CustomContext{}, "STARTING VIEWMORE SERVER, VERSION: "+version, m)
+
+	server.StartRoutes()
 }
