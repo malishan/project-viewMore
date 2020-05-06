@@ -1,8 +1,12 @@
 package core
 
 import (
+	"bytes"
+	"encoding/json"
 	"log"
 	"net/http"
+	"project/project-viewMore/apicontext"
+	"project/project-viewMore/loglib"
 	"time"
 
 	"github.com/gorilla/context"
@@ -82,7 +86,6 @@ func newRouter(subroute string) *mux.Router {
 }
 
 // useMiddleware applies chains of middleware (ie: log, contextWrapper, validateAuth) handler into incoming request
-// For example, logging middleware might write the incoming request details to a log
 // Note - It applies in reverse order
 func useMiddleware(h http.HandlerFunc, middleware ...func(http.HandlerFunc) http.HandlerFunc) http.HandlerFunc {
 	for _, m := range middleware {
@@ -102,6 +105,20 @@ func HTTPPingResponse(w http.ResponseWriter, statusCode int, data interface{}) {
 	renderer.JSON(w, statusCode, data)
 }
 
+//ErrorResponse - Return generic error message with error logging
+func ErrorResponse(ctx apicontext.CustomContext, w http.ResponseWriter, responseErrorMessage string, statusCode int, logError error, fields loglib.FieldsMap) {
+	var buf = new(bytes.Buffer)
+	encoder := json.NewEncoder(buf)
+
+	if logError != nil {
+		loglib.GenericError(ctx, logError, fields)
+	}
+
+	encoder.Encode(InvalidParamResponse{Message: responseErrorMessage})
+	w.WriteHeader(statusCode)
+	w.Write(buf.Bytes())
+}
+
 //AddNoAuthRoutes - Route without any Auth
 func AddNoAuthRoutes(methodName string, methodType string, mRoute string, handlerFunc http.HandlerFunc) {
 	r := route{
@@ -109,6 +126,18 @@ func AddNoAuthRoutes(methodName string, methodType string, mRoute string, handle
 		MethodType:  methodType,
 		Pattern:     mRoute,
 		HandlerFunc: useMiddleware(handlerFunc, logRequest),
+	}
+
+	routes = append(routes, r)
+}
+
+//AddLoginRoutes is to create routes without authentication check
+func AddLoginRoutes(methodName string, methodType string, mRoute string, m map[string]uint8, handlerFunc http.HandlerFunc) {
+	r := route{
+		Name:        methodName,
+		MethodType:  methodType,
+		Pattern:     mRoute,
+		HandlerFunc: useMiddleware(handlerFunc, loginContextWrapper, logRequest),
 	}
 
 	routes = append(routes, r)
