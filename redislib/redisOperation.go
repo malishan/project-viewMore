@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"project/project-viewMore/apicontext"
+	"project/project-viewMore/constant"
 	"project/project-viewMore/loglib"
 
 	"github.com/go-redis/redis"
@@ -18,7 +19,7 @@ var (
 func init() {
 	ctx := apicontext.CustomContext{}
 
-	address = os.Getenv("Redis_Host")
+	address = os.Getenv(constant.RedisHost)
 	if len(address) == 0 {
 		loglib.GenericFatalLog(ctx, errors.New("env variable not set for redis address"), nil)
 	}
@@ -29,7 +30,7 @@ func init() {
 func connectRedis() error {
 
 	clientOptions := &redis.Options{
-		Addr: "localhost:6379",
+		Addr: address,
 	}
 
 	client = redis.NewClient(clientOptions)

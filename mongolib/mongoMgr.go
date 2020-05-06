@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"project/project-viewMore/apicontext"
+	"project/project-viewMore/constant"
 	"project/project-viewMore/loglib"
 	"time"
 
@@ -20,7 +21,7 @@ var (
 func init() {
 	ctx := apicontext.CustomContext{}
 
-	host = os.Getenv("MongoHost")
+	host = os.Getenv(constant.MongoHost)
 	if len(host) == 0 {
 		loglib.GenericError(ctx, errors.New("MongoHost variable not set"), nil)
 		return
