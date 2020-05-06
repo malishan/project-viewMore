@@ -1,1 +1,11 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+**/.DS_Store
+.DS_Store
+.idea
+debug
 project-viewMore
+Gopkg.lock
+Gopkg.toml
+vendor
+_vendor-**
+mongodatabase
