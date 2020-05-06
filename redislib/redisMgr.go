@@ -30,7 +30,7 @@ func Set(key, value string) error {
 }
 
 // SetWithExp is to set the key value with an expiry
-func SetWithExp(expireSec int64, key, value string) error {
+func SetWithExp(expireSec int64, key string, value interface{}) error {
 	client, connErr := getConnection()
 	if connErr != nil {
 		return connErr

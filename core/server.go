@@ -119,6 +119,19 @@ func ErrorResponse(ctx apicontext.CustomContext, w http.ResponseWriter, response
 	w.Write(buf.Bytes())
 }
 
+// HTTPResponse writes the HTTPResponse and renders the json: Uses context
+func HTTPResponse(ctx apicontext.CustomContext, w http.ResponseWriter, statusCode int, msg string, data interface{}) {
+	renderer := render.New()
+	requestID := ctx.RequestID
+
+	res := Response{}
+	res.Meta.Code = statusCode
+	res.Meta.Msg = msg
+	res.Meta.RequestID = requestID
+	res.Data = data
+	renderer.JSON(w, statusCode, res)
+}
+
 //AddNoAuthRoutes - Route without any Auth
 func AddNoAuthRoutes(methodName string, methodType string, mRoute string, handlerFunc http.HandlerFunc) {
 	r := route{

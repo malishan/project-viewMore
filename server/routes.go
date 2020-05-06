@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 	"project/project-viewMore/core"
+	"project/project-viewMore/handlers"
 )
 
 const (
@@ -24,5 +25,24 @@ func init() {
 
 //StartRoutes is the starting point of the http service
 func StartRoutes() {
+
+	/*---------------------------------Registration-------------------------------*/
+	core.AddLoginRoutes(
+		"SignUp",
+		http.MethodPost,
+		"/register",
+		nil,
+		handlers.UserSignUp,
+	)
+
+	/*---------------------------------Login-------------------------------*/
+	core.AddLoginRoutes(
+		"Login",
+		http.MethodPost,
+		"/login",
+		nil,
+		handlers.UserLogin,
+	)
+
 	core.StartServer(Port, SubRoute)
 }

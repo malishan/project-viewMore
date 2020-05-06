@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	client *redis.ClusterClient
+	client *redis.Client
 
 	address string
 )
@@ -28,18 +28,18 @@ func init() {
 
 func connectRedis() error {
 
-	clusterOptions := &redis.ClusterOptions{
-		Addrs: []string{address},
+	clientOptions := &redis.Options{
+		Addr: "localhost:6379",
 	}
 
-	client = redis.NewClusterClient(clusterOptions)
+	client = redis.NewClient(clientOptions)
 
 	_, err := client.Ping().Result()
 
 	return err
 }
 
-func getConnection() (*redis.ClusterClient, error) {
+func getConnection() (*redis.Client, error) {
 	if client == nil {
 		err := connectRedis()
 		if err == nil {
