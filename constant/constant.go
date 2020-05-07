@@ -18,6 +18,10 @@ const (
 )
 
 const (
+	MovieNameQueryString = "movieName"
+)
+
+const (
 	AdminRole = "admin"
 	UserRole  = "user"
 	GuestRole = "guest"

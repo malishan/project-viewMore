@@ -66,5 +66,13 @@ func StartRoutes() {
 		handlers.AddMovieComment,
 	)
 
+	/*---------------------------------Search Movie-------------------------------*/
+	core.AddRoute(
+		"Search Movie Info",
+		http.MethodGet,
+		"/search-movie",
+		handlers.SearchMovie,
+	)
+
 	core.StartServer(Port, SubRoute)
 }

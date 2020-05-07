@@ -47,7 +47,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 
 	isExist, dbErr := mongolib.Exist(constant.MongoDatabaseName, constant.MongoMovieCollection, bson.M{"name": movie.Name})
 	if dbErr != nil {
-		core.ErrorResponse(ctx, w, "failed to connect db", http.StatusInternalServerError, errors.New("failed to connect db"), nil)
+		core.ErrorResponse(ctx, w, "failed to connect db", http.StatusInternalServerError, fmt.Errorf("failed to connect db, err: %v", dbErr), nil)
 		return
 	} else if isExist {
 		core.ErrorResponse(ctx, w, "movieName already exists", http.StatusBadRequest, errors.New("movieName already exists"), nil)
