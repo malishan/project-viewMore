@@ -3,7 +3,6 @@ package core
 import (
 	"bytes"
 	"encoding/json"
-	"log"
 	"net/http"
 	"project/project-viewMore/apicontext"
 	"project/project-viewMore/loglib"
@@ -66,7 +65,7 @@ func StartServer(port, subroute string) {
 
 	handlers := handlers.CORS(allowedHeaders, allowedMethods, allowedOrigins, allowCredential)(context.ClearHandler(newRouter(subroute)))
 
-	log.Fatal(http.ListenAndServe(":"+port, handlers))
+	loglib.GenericFatalLog(apicontext.CustomContext{}, http.ListenAndServe(":"+port, handlers), nil)
 }
 
 // NewRouter provides a mux Router.
@@ -132,8 +131,8 @@ func HTTPResponse(ctx apicontext.CustomContext, w http.ResponseWriter, statusCod
 	renderer.JSON(w, statusCode, res)
 }
 
-//AddNoAuthRoutes - Route without any Auth
-func AddNoAuthRoutes(methodName string, methodType string, mRoute string, handlerFunc http.HandlerFunc) {
+//AddNoAuthRoute - Route without any Auth
+func AddNoAuthRoute(methodName string, methodType string, mRoute string, handlerFunc http.HandlerFunc) {
 	r := route{
 		Name:        methodName,
 		MethodType:  methodType,
@@ -144,13 +143,25 @@ func AddNoAuthRoutes(methodName string, methodType string, mRoute string, handle
 	routes = append(routes, r)
 }
 
-//AddLoginRoutes is to create routes without authentication check
-func AddLoginRoutes(methodName string, methodType string, mRoute string, m map[string]uint8, handlerFunc http.HandlerFunc) {
+//AddLoginRoute is to create route for login purpose only
+func AddLoginRoute(methodName string, methodType string, mRoute string, handlerFunc http.HandlerFunc) {
 	r := route{
 		Name:        methodName,
 		MethodType:  methodType,
 		Pattern:     mRoute,
 		HandlerFunc: useMiddleware(handlerFunc, loginContextWrapper, logRequest),
+	}
+
+	routes = append(routes, r)
+}
+
+// AddRoute is to create routes with auth and user details
+func AddRoute(methodName, methodType, mRoute string, handlerFunc http.HandlerFunc) {
+	r := route{
+		Name:        methodName,
+		MethodType:  methodType,
+		Pattern:     mRoute,
+		HandlerFunc: useMiddleware(handlerFunc, validateContext, logRequest, createContext),
 	}
 
 	routes = append(routes, r)

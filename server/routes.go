@@ -16,7 +16,7 @@ const (
 func init() {
 
 	//Adding ping api check for all the services for health check
-	core.AddNoAuthRoutes(
+	core.AddNoAuthRoute(
 		"Ping Check",
 		http.MethodGet,
 		"/health",
@@ -27,21 +27,27 @@ func init() {
 func StartRoutes() {
 
 	/*---------------------------------Registration-------------------------------*/
-	core.AddLoginRoutes(
+	core.AddLoginRoute(
 		"SignUp",
 		http.MethodPost,
 		"/register",
-		nil,
 		handlers.UserSignUp,
 	)
 
 	/*---------------------------------Login-------------------------------*/
-	core.AddLoginRoutes(
+	core.AddLoginRoute(
 		"Login",
 		http.MethodPost,
 		"/login",
-		nil,
 		handlers.UserLogin,
+	)
+
+	/*---------------------------------Add New Movie-------------------------------*/
+	core.AddRoute(
+		"",
+		http.MethodPost,
+		"/add-movie",
+		handlers.AddMovie,
 	)
 
 	core.StartServer(Port, SubRoute)

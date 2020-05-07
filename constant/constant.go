@@ -9,6 +9,7 @@ const (
 	MongoDatabaseName    = "global"
 	MongoAdminCollection = "viewMoreAdmin"
 	MongoUserCollection  = "viewMoreUser"
+	MongoMovieCollection = "viewMoreMovies"
 )
 
 const (
@@ -19,7 +20,9 @@ const (
 const (
 	AdminRole = "admin"
 	UserRole  = "user"
+	GuestRole = "guest"
 	Email     = "email"
+	UserAgent = "User-Agent"
 )
 
 const (

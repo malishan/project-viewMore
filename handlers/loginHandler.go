@@ -73,5 +73,5 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	core.HTTPResponse(ctx, w, http.StatusOK, "login successful", rsltUser.UserID)
+	core.HTTPResponse(ctx, w, http.StatusOK, "login successful", rsltUser.UserID.String())
 }
