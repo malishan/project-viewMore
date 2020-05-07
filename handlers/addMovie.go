@@ -15,7 +15,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-//AddMovie handler adds new movie info by the admin
+//AddMovie handler adds new movie info by the admin user only
 func AddMovie(w http.ResponseWriter, r *http.Request) {
 	ctx := apicontext.UpgradeContext(r.Context())
 

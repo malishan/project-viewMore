@@ -44,10 +44,18 @@ func StartRoutes() {
 
 	/*---------------------------------Add New Movie-------------------------------*/
 	core.AddRoute(
-		"",
+		"Add New Movie",
 		http.MethodPost,
 		"/add-movie",
 		handlers.AddMovie,
+	)
+
+	/*---------------------------------Rate A Movie-------------------------------*/
+	core.AddRoute(
+		"Rate A Movie",
+		http.MethodPost,
+		"/rate-movie",
+		handlers.AddMovieRating,
 	)
 
 	core.StartServer(Port, SubRoute)
