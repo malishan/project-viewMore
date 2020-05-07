@@ -99,9 +99,9 @@ func AddMovieRating(w http.ResponseWriter, r *http.Request) {
 	Mutex.Unlock()
 
 	if updateErr != nil {
-		core.ErrorResponse(ctx, w, "rating update failed", http.StatusBadRequest, fmt.Errorf("rating update failed: %v", updateErr), nil)
+		core.ErrorResponse(ctx, w, "rating updation failed", http.StatusBadRequest, fmt.Errorf("rating updation failed: %v", updateErr), nil)
 		return
 	}
 
-	core.HTTPResponse(ctx, w, http.StatusOK, "movie added successfully", fmt.Sprintf("total updated document: %v", updateRslt.ModifiedCount))
+	core.HTTPResponse(ctx, w, http.StatusOK, "movie rating added successfully", fmt.Sprintf("total updated document: %v", updateRslt.ModifiedCount))
 }

@@ -58,5 +58,13 @@ func StartRoutes() {
 		handlers.AddMovieRating,
 	)
 
+	/*---------------------------------Comment on A Movie-------------------------------*/
+	core.AddRoute(
+		"Comment On A Movie",
+		http.MethodPost,
+		"/comment-movie",
+		handlers.AddMovieComment,
+	)
+
 	core.StartServer(Port, SubRoute)
 }

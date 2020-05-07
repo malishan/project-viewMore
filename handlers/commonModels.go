@@ -35,9 +35,9 @@ type UserFeedback struct {
 
 //UserRatingAndComment - rating and comment of individual user
 type UserRatingAndComment struct {
-	MovieName string  `json:"movieName" bson:"movieName"`
-	Rating    float64 `json:"rating" bson:"rating"`
-	Comment   string  `json:"comment" bson:"comment"`
+	MovieName string  `json:"movieName"`
+	Rating    float64 `json:"rating"`
+	Comment   string  `json:"comment"`
 }
 
 var (
