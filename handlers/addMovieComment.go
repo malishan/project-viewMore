@@ -40,7 +40,7 @@ func AddMovieComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if usrComm.MovieName == "" || usrComm.Comment == "" {
+	if usrComm.MovieName == "" || usrComm.Comment[0] == "" {
 		core.ErrorResponse(ctx, w, "incomplete request body", http.StatusBadRequest, errors.New("movieName or comment missing from request body"), nil)
 		return
 	}
@@ -74,7 +74,7 @@ func AddMovieComment(w http.ResponseWriter, r *http.Request) {
 			UserID:      ctx.UserID,
 			UserEmail:   ctx.Email,
 			UpdatedTime: time.Now().UnixNano() / int64(time.Millisecond),
-			UserComment: []string{usrComm.Comment},
+			UserComment: []string{usrComm.Comment[0]},
 		}
 
 		filter = bson.M{"name": usrComm.MovieName}
