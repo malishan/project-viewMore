@@ -50,16 +50,29 @@ func AddMovieRating(w http.ResponseWriter, r *http.Request) {
 	}
 	readErr := mongolib.ReadOne(constant.MongoDatabaseName, constant.MongoMovieCollection, bson.M{"name": usrRating.MovieName}, &prevRating)
 	if readErr != nil {
-		core.ErrorResponse(ctx, w, "movieName not found", http.StatusBadRequest, fmt.Errorf("failed to fetch movieDetails: %v", readErr), nil)
+		core.ErrorResponse(ctx, w, "movieName not found, (or mongo server inactive)", http.StatusBadRequest, fmt.Errorf("failed to fetch movieDetails: %v", readErr), nil)
+		Mutex.Unlock()
+		return
+	}
+
+	//duplicate rating not allowed
+	isPresent, existErr := mongolib.Exist(constant.MongoDatabaseName, constant.MongoMovieCollection, bson.M{"name": usrRating.MovieName, "userFeedback": bson.M{"$elemMatch": bson.M{"userID": ctx.UserID, "userRating": bson.M{"$exists": true}}}})
+	if existErr != nil {
+		core.ErrorResponse(ctx, w, "failed to connect mongo", http.StatusBadRequest, fmt.Errorf("failed to connect mongo: %v", existErr), nil)
+		Mutex.Unlock()
+		return
+	} else if isPresent {
+		core.ErrorResponse(ctx, w, "you have already rated this movie", http.StatusBadRequest, errors.New("you have already rated this movie"), nil)
 		Mutex.Unlock()
 		return
 	}
 
 	newAvg := (prevRating.Rate*float64(prevRating.Count) + usrRating.Rating) / float64(prevRating.Count+1)
 
-	isPresent, existErr := mongolib.Exist(constant.MongoDatabaseName, constant.MongoMovieCollection, bson.M{"name": usrRating.MovieName, "userFeedback.userID": ctx.UserID})
+	isPresent, existErr = mongolib.Exist(constant.MongoDatabaseName, constant.MongoMovieCollection, bson.M{"name": usrRating.MovieName, "userFeedback.userID": ctx.UserID})
 	if existErr != nil {
 		core.ErrorResponse(ctx, w, "failed to connect mongo", http.StatusBadRequest, fmt.Errorf("failed to connect mongo: %v", existErr), nil)
+		Mutex.Unlock()
 		return
 	}
 
