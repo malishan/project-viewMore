@@ -30,5 +30,5 @@ const (
 )
 
 const (
-	LoginExpirationTime int64 = 9000000
+	LoginExpirationTime int64 = 900
 )

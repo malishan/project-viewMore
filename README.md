@@ -24,12 +24,12 @@ INSTRUCTION TO RUN BINARY:
 
 POINTS TO NOTE:
 
-1. Login API not functioning it
+1. Admin and User must login first to use certain APIs
 2. Movie can only be added by admin
 3. Rating and Comment can only be given by loggedIn users
 4. Movie Search can be done by anyone
 5. Feedback available only for loggedIn users
-6. Once a user has rated on a movie, he/she cannot rate again
+6. Once a user has rated on a movie, he/she cannot rate it again
 7. Multiple comments on a movie can be put up by a single loggedIn user
 
 
@@ -40,4 +40,3 @@ NOTE:
 1. All APIs are present in json files (2 files containing different format)
 2. Three Mongo Collections are present in json files
 3. ACL not handled
-4. Facing issue with redis, thus login not implemented completely

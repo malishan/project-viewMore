@@ -8,8 +8,6 @@ import (
 	"project/project-viewMore/constant"
 	"project/project-viewMore/loglib"
 	"project/project-viewMore/mongolib"
-	"project/project-viewMore/redislib"
-	"time"
 
 	"github.com/twinj/uuid"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -130,13 +128,6 @@ func validateContext(next http.HandlerFunc) http.HandlerFunc {
 			ErrorResponse(tempContext, w, "user not registered", http.StatusBadRequest, errors.New("user not registered"), nil)
 			return
 		}
-
-		go func(ctx apicontext.CustomContext, id string) {
-			err := redislib.SetWithExp(constant.LoginExpirationTime, id, time.Now().Unix())
-			if err != nil {
-				loglib.GenericError(ctx, fmt.Errorf("redis call failed, err: %v", err), nil)
-			}
-		}(tempContext, apiCtx.UserID)
 
 		ctx = apicontext.WithAPIContext(ctx, apiCtx)
 		next.ServeHTTP(w, r.WithContext(ctx))

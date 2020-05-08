@@ -9,6 +9,7 @@ import (
 	"project/project-viewMore/constant"
 	"project/project-viewMore/core"
 	"project/project-viewMore/mongolib"
+	"project/project-viewMore/utils"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -23,11 +24,11 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// _, err := redislib.Get(ctx.UserID)
-	// if err != nil {
-	// 	core.ErrorResponse(ctx, w, "admin login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
-	// 	return
-	// }
+	err := utils.IsUserLoggedIn(ctx.UserID)
+	if err != nil {
+		core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
+		return
+	}
 
 	var movie MovieDescription
 	decodeErr := json.NewDecoder(r.Body).Decode(&movie)

@@ -8,6 +8,7 @@ import (
 	"project/project-viewMore/constant"
 	"project/project-viewMore/core"
 	"project/project-viewMore/mongolib"
+	"project/project-viewMore/utils"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -21,11 +22,11 @@ func FetchUserFeedback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// _, err := redislib.Get(ctx.UserID)
-	// if err != nil {
-	// 	core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
-	// 	return
-	// }
+	err := utils.IsUserLoggedIn(ctx.UserID)
+	if err != nil {
+		core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
+		return
+	}
 
 	q1 := bson.M{"$unwind": "$userFeedback"}
 	q2 := bson.M{"$group": bson.M{"_id": bson.M{"movieName": "$name", "userID": "$userFeedback.userID"}, "movieName": bson.M{"$first": "$name"}, "userID": bson.M{"$first": "$userFeedback.userID"}, "rating": bson.M{"$first": "$userFeedback.userRating"}, "comments": bson.M{"$first": "$userFeedback.userComment"}}}
