@@ -1,0 +1,118 @@
+HEALTH
+
+curl --location --request GET 'http://localhost:8989/viewmore/health'
+
+
+/********************************************************************************************************/
+
+USER REGISTER
+
+curl --location --request POST 'http://localhost:8989/viewmore/register' \
+--header 'roleID: user' \
+--form 'registrationform={ 
+   "name":"Alishan",
+   "email":"alishan@gmail.com",
+   "pswd":"12345",
+   "phoneNo":[ 
+      "7060195984"
+   ],
+   "address":"Delhi"
+}'
+
+
+/********************************************************************************************************/
+
+ADMIN REGISTER
+
+curl --location --request POST 'http://localhost:8989/viewmore/register' \
+--header 'roleID: admin' \
+--form 'registrationform={ 
+   "name":"Devesh",
+   "email":"dev@gmail.com",
+   "pswd":"123456",
+   "phoneNo":[ 
+      "6143129678"
+   ],
+   "address":"Dehradun"
+}'
+
+/********************************************************************************************************/
+
+USER LOGIN
+
+curl --location --request POST 'http://localhost:8989/viewmore/login' \
+--header 'roleID: user' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'loginForm={
+	"email": "rishab@gmail.com",
+	"pswd": "12345"
+}'
+
+/********************************************************************************************************/
+
+ADMIN LOGIN
+
+curl --location --request POST 'http://localhost:8989/viewmore/login' \
+--header 'roleID: admin' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'loginForm={
+	"email": "dev@gmail.com",
+	"pswd": "123456"
+}'
+
+/********************************************************************************************************/
+
+ADD MOVIE
+
+curl --location --request POST 'http://localhost:8989/viewmore/add-movie' \
+--header 'roleID: admin' \
+--header 'email: dev@gmail.com' \
+--header 'Content-Type: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"name": "Before Sunset"
+}'
+
+/********************************************************************************************************/
+
+ADD RATING
+
+curl --location --request POST 'http://localhost:8989/viewmore/rate-movie' \
+--header 'roleID: user' \
+--header 'email: zeeshan@gmail.com' \
+--header 'Content-Type: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"movieName": "Before Sunset",
+	"rating": 8.5
+}'
+
+/********************************************************************************************************/
+
+ADD COMMENT
+
+curl --location --request POST 'http://localhost:8989/viewmore/comment-movie' \
+--header 'roleID: user' \
+--header 'email: zeeshan@gmail.com' \
+--header 'Content-Type: application/json' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+	"movieName": "Before Sunset",
+	"comments": "waiting for the next part"
+}'
+
+/********************************************************************************************************/
+
+SEARCH MOVIE
+
+curl --location --request GET 'http://localhost:8989/viewmore/search-movie?movieName=Black%20Hawk%20Down' \
+--header 'Content-Type: application/json'
+
+/********************************************************************************************************/
+
+FETCH USER FEEDBACK
+
+curl --location --request GET 'http://localhost:8989/viewmore/user-feedback' \
+--header 'roleID: user' \
+--header 'email: alishan@gmail.com' \
+--header 'Content-Type: application/json'

@@ -1,0 +1,34 @@
+[{
+  "_id": {
+    "$oid": "5eb548b375aca58452e1c7b8"
+  },
+  "name": "Rishab",
+  "email": "rishab@gmail.com",
+  "pswd": "$2a$05$eSd48Xs/qBKGIsDMC1GQtOI1u3Mqjo6C/bvW6vulXwelsmywH0GmW",
+  "phoneNo": [
+    "8997500675"
+  ],
+  "address": "Lucknow"
+},{
+  "_id": {
+    "$oid": "5eb548c375aca58452e1c7b9"
+  },
+  "name": "Zeeshan",
+  "email": "zeeshan@gmail.com",
+  "pswd": "$2a$05$S1/6LDh7ggNlHDZkvqWlYumiX4Jf15Cidi6lr.4sIf5bjHuqtEI7m",
+  "phoneNo": [
+    "9557500675"
+  ],
+  "address": "New Delhi"
+},{
+  "_id": {
+    "$oid": "5eb548d275aca58452e1c7ba"
+  },
+  "name": "Alishan",
+  "email": "alishan@gmail.com",
+  "pswd": "$2a$05$aRotxBRZR7p9msPxoVhB4eC7EyaBZ1Z3n1tfGsi6t4Q616jZXPVzm",
+  "phoneNo": [
+    "7060195984"
+  ],
+  "address": "Delhi"
+}]

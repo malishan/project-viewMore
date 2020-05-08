@@ -3,7 +3,7 @@
 .DS_Store
 .idea
 debug
-project-viewMore
+#project-viewMore
 Gopkg.lock
 Gopkg.toml
 vendor

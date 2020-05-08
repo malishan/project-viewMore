@@ -1,0 +1,106 @@
+[{
+  "_id": {
+    "$oid": "5eb5499275aca58452e1c7bd"
+  },
+  "name": "Black Hawk Down",
+  "timestamp": 1588939154374,
+  "userAgent": "PostmanRuntime/7.24.1",
+  "email": "mahi@gmail.com",
+  "remoteAddr": "[::1]:60581",
+  "avgRating": 6.666666666666667,
+  "ratingCount": 3,
+  "userFeedback": [
+    {
+      "userID": "5eb548b375aca58452e1c7b8",
+      "userEmail": "rishab@gmail.com",
+      "updatedTime": 1588943636769,
+      "userRating": 8.5,
+      "userComment": [
+        "amazing action"
+      ]
+    },
+    {
+      "userID": "5eb548d275aca58452e1c7ba",
+      "userEmail": "alishan@gmail.com",
+      "updatedTime": 1588947556190,
+      "userComment": [
+        "interesting"
+      ],
+      "userRating": 6.5
+    },
+    {
+      "userID": "5eb548c375aca58452e1c7b9",
+      "userEmail": "zeeshan@gmail.com",
+      "updatedTime": 1588948468690,
+      "userComment": [
+        "expected more",
+        "worth watching once"
+      ],
+      "userRating": 5
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "5eb549a275aca58452e1c7be"
+  },
+  "name": "The Shawshank Redemption",
+  "timestamp": 1588939170333,
+  "userAgent": "PostmanRuntime/7.24.1",
+  "email": "mahi@gmail.com",
+  "remoteAddr": "[::1]:60581",
+  "avgRating": 8.25,
+  "ratingCount": 2,
+  "userFeedback": [
+    {
+      "userID": "5eb548c375aca58452e1c7b9",
+      "userEmail": "zeeshan@gmail.com",
+      "updatedTime": 1588948613861,
+      "userRating": 9,
+      "userComment": [
+        "amazing dialogue delivery",
+        "enjoyed every sec"
+      ]
+    },
+    {
+      "userID": "5eb548d275aca58452e1c7ba",
+      "userEmail": "alishan@gmail.com",
+      "updatedTime": 1588948867417,
+      "userComment": [
+        "nice plot"
+      ],
+      "userRating": 7.5
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "5eb549ce75aca58452e1c7bf"
+  },
+  "name": "Before Sunset",
+  "timestamp": 1588939214792,
+  "userAgent": "PostmanRuntime/7.24.1",
+  "email": "dev@gmail.com",
+  "remoteAddr": "[::1]:60581",
+  "userFeedback": [
+    {
+      "userID": "5eb548b375aca58452e1c7b8",
+      "userEmail": "rishab@gmail.com",
+      "updatedTime": 1588949034186,
+      "userComment": [
+        "too slow"
+      ],
+      "userRating": 4.5
+    },
+    {
+      "userID": "5eb548c375aca58452e1c7b9",
+      "userEmail": "zeeshan@gmail.com",
+      "updatedTime": 1588949153400,
+      "userRating": 8.5,
+      "userComment": [
+        "great content",
+        "waiting for the next part"
+      ]
+    }
+  ],
+  "avgRating": 6.5,
+  "ratingCount": 2
+}]

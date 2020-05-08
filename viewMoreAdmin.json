@@ -1,0 +1,23 @@
+[{
+  "_id": {
+    "$oid": "5eb548f575aca58452e1c7bb"
+  },
+  "name": "Mahipal",
+  "email": "mahi@gmail.com",
+  "pswd": "$2a$05$wcDEcerFFOUxc2neXPDmZOrrCk6XFe3cE42do.KrBIhtv.1trB6QC",
+  "phoneNo": [
+    "7863129678"
+  ],
+  "address": "Kota"
+},{
+  "_id": {
+    "$oid": "5eb5490075aca58452e1c7bc"
+  },
+  "name": "Devesh",
+  "email": "dev@gmail.com",
+  "pswd": "$2a$05$UbPdFY3CezAhzAyjkOu4Gut.CXvXvfWNnoCx2saahsb/4hGp6C/tm",
+  "phoneNo": [
+    "6143129678"
+  ],
+  "address": "Dehradun"
+}]

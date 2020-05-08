@@ -1,0 +1,393 @@
+{
+	"info": {
+		"_postman_id": "bffad9e8-2f0c-4a86-abca-d25fcfff8207",
+		"name": "ViewMore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8989/viewmore/health",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "user",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "registrationform",
+							"value": "{ \n   \"name\":\"Alishan\",\n   \"email\":\"alishan@gmail.com\",\n   \"pswd\":\"123456\",\n   \"phoneNo\":[ \n      \"7060195984\"\n   ],\n   \"address\":\"Delhi\"\n}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "user",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginForm",
+							"value": "{\n\t\"email\": \"alishan@gmail.com\",\n       \"name\": \"Alishan\",\n\t\"pswd\": \"123456\"\n}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "admin"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "registrationform",
+							"value": "{ \n   \"name\":\"Rahul\",\n   \"email\":\"rahulrk@gmail.com\",\n   \"pswd\":\"12345\",\n   \"phoneNo\":[ \n      \"8826129678\"\n   ],\n   \"address\":\"UK\"\n}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "user"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginForm",
+							"value": "{\n\t\"email\": \"rahulrk@gmail.com\",\n       \"name\": \"Rahul\",\n\t\"pswd\": \"12345\"\n}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/add-movie",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "admin",
+						"type": "text"
+					},
+					{
+						"key": "email",
+						"value": "rahulrk@gmail.com",
+						"type": "text"
+					},
+					{
+						"key": "userID",
+						"value": "5eb489d9ade80982d853501a",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Fast And Furious\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/add-movie",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"add-movie"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/rate-movie",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "user",
+						"type": "text"
+					},
+					{
+						"key": "email",
+						"value": "alishan@gmail.com",
+						"type": "text"
+					},
+					{
+						"key": "userID",
+						"value": "5eb48d47d672a793ed4d537a",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"movieName\": \"Fast And Furious\",\n\t\"rating\": 5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/rate-movie",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"rate-movie"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/search-movie",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "email",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8989/viewmore/search-movie?movieName=Fast And Furious",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"search-movie"
+					],
+					"query": [
+						{
+							"key": "movieName",
+							"value": "Fast And Furious"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/comment-movie",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "user"
+					},
+					{
+						"key": "email",
+						"value": "alishan@gmail.com"
+					},
+					{
+						"key": "userID",
+						"value": "5eb48d47d672a793ed4d537a"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"movieName\": \"Fast And Furious\",\n\t\"comments\": [\n\t\t\t\"Amazing movie\"\n\t\t]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8989/viewmore/comment-movie",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"comment-movie"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user-feedback",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "roleID",
+						"value": "user",
+						"type": "text"
+					},
+					{
+						"key": "email",
+						"value": "alishan@gmail.com",
+						"type": "text"
+					},
+					{
+						"key": "userID",
+						"value": "5eb48d47d672a793ed4d537a",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8989/viewmore/user-feedback",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8989",
+					"path": [
+						"viewmore",
+						"user-feedback"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
