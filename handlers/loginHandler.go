@@ -67,11 +67,11 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = redislib.SetWithExp(constant.LoginExpirationTime, rsltUser.UserID.String(), time.Now().Unix())
+	err = redislib.SetWithExp(constant.LoginExpirationTime, rsltUser.UserID.Hex(), time.Now().Unix())
 	if err != nil {
 		core.ErrorResponse(ctx, w, "internal server error", http.StatusInternalServerError, fmt.Errorf("internal server error: %v", err), nil)
 		return
 	}
 
-	core.HTTPResponse(ctx, w, http.StatusOK, "login successful", rsltUser.UserID.String())
+	core.HTTPResponse(ctx, w, http.StatusOK, "login successful", rsltUser.UserID.Hex())
 }

@@ -32,17 +32,20 @@ func SearchMovie(w http.ResponseWriter, r *http.Request) {
 	var movieResponse MovieDescription
 
 	readErr := mongolib.ReadOne(constant.MongoDatabaseName, constant.MongoMovieCollection, bson.M{"name": movieName}, &movieResponse)
-	if readErr != nil && !strings.Contains(readErr.Error(), "not found") {
-		core.ErrorResponse(ctx, w, "failed to connect db", http.StatusInternalServerError, errors.New("failed to connect db"), nil)
-		return
-	} else if strings.Contains(readErr.Error(), "not found") {
-		core.ErrorResponse(ctx, w, "such movie does not exist", http.StatusBadRequest, fmt.Errorf("movie not found, err: %v", readErr), nil)
+	if readErr != nil {
+		if !strings.Contains(readErr.Error(), "no documents") {
+			core.ErrorResponse(ctx, w, "failed to connect db", http.StatusInternalServerError, fmt.Errorf("failed to connect db, err: %v", readErr), nil)
+		} else {
+			core.ErrorResponse(ctx, w, "movieName not found", http.StatusBadRequest, fmt.Errorf("movie not found, err: %v", readErr), nil)
+		}
+
 		return
 	}
 
 	movieResponse.InsertTimestamp = 0
 	movieResponse.RemoteAddress = ""
 	movieResponse.UserAgent = ""
+	movieResponse.UserEmail = ""
 
 	core.HTTPResponse(ctx, w, http.StatusOK, "movie fetched successfully", movieResponse)
 }

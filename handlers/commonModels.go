@@ -2,6 +2,11 @@ package handlers
 
 import "sync"
 
+var (
+	//Mutex - global mutext to handle synchronization
+	Mutex sync.Mutex
+)
+
 // UserInfo forms the basic structure of an user
 type UserInfo struct {
 	UserID   string   `json:"_id,omitempty" bson:"_id,omitempty"`
@@ -20,6 +25,7 @@ type MovieDescription struct {
 	RatingCount     int            `json:"ratingCount,omitempty" bson:"ratingCount,omitempty"`
 	InsertTimestamp int64          `json:"timestamp,omitempty" bson:"timestamp,omitempty"`
 	UserAgent       string         `json:"userAgent,omitempty" bson:"userAgent,omitempty"`
+	UserEmail       string         `json:"email,omitempty" bson:"email,omitempty"`
 	RemoteAddress   string         `json:"remoteAddr,omitempty" bson:"remoteAddr,omitempty"`
 	IndivFeedback   []UserFeedback `json:"userFeedback,omitempty" bson:"userFeedback,omitempty"`
 }
@@ -35,12 +41,7 @@ type UserFeedback struct {
 
 //UserRatingAndComment - rating and comment of individual user
 type UserRatingAndComment struct {
-	MovieName string   `json:"movieName"`
-	Rating    float64  `json:"rating"`
-	Comment   []string `json:"comments"`
+	MovieName string  `json:"movieName"`
+	Rating    float64 `json:"rating"`
+	Comment   string  `json:"comments"`
 }
-
-var (
-	//Mutex - global mutext to handle synchronization
-	Mutex sync.Mutex
-)

@@ -9,7 +9,6 @@ import (
 	"project/project-viewMore/constant"
 	"project/project-viewMore/core"
 	"project/project-viewMore/mongolib"
-	"project/project-viewMore/redislib"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -22,16 +21,13 @@ func AddMovieRating(w http.ResponseWriter, r *http.Request) {
 	if ctx.RoleID != constant.UserRole {
 		core.ErrorResponse(ctx, w, "user not allowed", http.StatusForbidden, errors.New("user not allowed"), nil)
 		return
-	} else if ctx.UserID == "" {
-		core.ErrorResponse(ctx, w, "userID missing from header", http.StatusBadRequest, errors.New("userID missing from header"), nil)
-		return
 	}
 
-	_, err := redislib.Get(ctx.UserID)
-	if err != nil {
-		core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
-		return
-	}
+	// _, err := redislib.Get(ctx.UserID)
+	// if err != nil {
+	// 	core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
+	// 	return
+	// }
 
 	var usrRating UserRatingAndComment
 	decodeErr := json.NewDecoder(r.Body).Decode(&usrRating)
@@ -45,6 +41,7 @@ func AddMovieRating(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//locking is required because maybe multiple hit of this API can occur at the same time. This will result into incorrect average calculation
 	Mutex.Lock()
 
 	var prevRating struct {
@@ -88,10 +85,10 @@ func AddMovieRating(w http.ResponseWriter, r *http.Request) {
 		update = bson.M{
 			"$set": bson.M{
 				"avgRating":   newAvg,
-				"ratingCount": prevRating.Count + 1,
-				"$addToSet": bson.M{
-					"userFeedback": feedback},
-			}}
+				"ratingCount": prevRating.Count + 1},
+			"$addToSet": bson.M{
+				"userFeedback": feedback},
+		}
 	}
 
 	updateRslt, updateErr := mongolib.Update(constant.MongoDatabaseName, constant.MongoMovieCollection, filter, update)

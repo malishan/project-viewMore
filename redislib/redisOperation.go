@@ -30,7 +30,9 @@ func init() {
 func connectRedis() error {
 
 	clientOptions := &redis.Options{
-		Addr: address,
+		Addr:     address,
+		Password: "",
+		DB:       0,
 	}
 
 	client = redis.NewClient(clientOptions)

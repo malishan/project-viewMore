@@ -67,12 +67,10 @@ func createContext(next http.HandlerFunc) http.HandlerFunc {
 			requestID = uuid.NewV4().String()
 		}
 
-		userEmail, userID, userName, roleID := header.Get(UserEmail), header.Get(UserID), header.Get(UserName), header.Get(RoleID)
-		//token := header.Get(AppAPIToken)
+		userEmail, userName, roleID := header.Get(UserEmail), header.Get(UserName), header.Get(RoleID)
 
 		apiCtx := apicontext.APIContext{
 			RequestID: requestID,
-			UserID:    userID,
 			UserName:  userName,
 			Email:     userEmail,
 			RoleID:    roleID,
@@ -86,7 +84,6 @@ func createContext(next http.HandlerFunc) http.HandlerFunc {
 // validateContext incoming request context
 func validateContext(next http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		ctx := r.Context()
 		apiCtx, ok := ctx.Value(apicontext.APICtx).(apicontext.APIContext)
 
@@ -98,46 +95,50 @@ func validateContext(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
+		if r.URL.Path == "/viewmore/search-movie" {
+			next.ServeHTTP(w, r)
+			return
+		} else if !(apiCtx.RoleID == constant.AdminRole || apiCtx.RoleID == constant.UserRole) {
+			ErrorResponse(tempContext, w, "roleID header incorrect", http.StatusBadRequest, errors.New("roleID header incorrect"), nil)
+			return
+		}
+
 		if len(apiCtx.Email) == 0 {
 			ErrorResponse(tempContext, w, "email header missing", http.StatusBadRequest, errors.New("email header missing"), nil)
 			return
 		}
 
-		if !(len(apiCtx.RoleID) == 0 || apiCtx.RoleID == constant.AdminRole || apiCtx.RoleID == constant.UserRole) {
-			ErrorResponse(tempContext, w, "email header missing", http.StatusBadRequest, errors.New("email header missing"), nil)
+		var userID struct {
+			ID primitive.ObjectID `json:"_id" bson:"_id"`
+		}
+
+		collectionName := ""
+		if apiCtx.RoleID == constant.AdminRole {
+			collectionName = constant.MongoAdminCollection
+		} else {
+			collectionName = constant.MongoUserCollection
+		}
+
+		err := mongolib.ReadOne(constant.MongoDatabaseName, collectionName, bson.M{"email": apiCtx.Email}, &userID)
+		if err != nil {
+			ErrorResponse(tempContext, w, "email incorrect, please register (or mongo inactive)", http.StatusBadRequest, fmt.Errorf("failed to fetch userID, err: %v", err), nil)
+			return
+		}
+		apiCtx.UserID = userID.ID.Hex()
+
+		if len(apiCtx.UserID) == 0 {
+			ErrorResponse(tempContext, w, "user not registered", http.StatusBadRequest, errors.New("user not registered"), nil)
 			return
 		}
 
-		if apiCtx.RoleID == constant.AdminRole || apiCtx.RoleID == constant.UserRole {
-			go updateLoginStatus(tempContext)
-		}
+		go func(ctx apicontext.CustomContext, id string) {
+			err := redislib.SetWithExp(constant.LoginExpirationTime, id, time.Now().Unix())
+			if err != nil {
+				loglib.GenericError(ctx, fmt.Errorf("redis call failed, err: %v", err), nil)
+			}
+		}(tempContext, apiCtx.UserID)
 
 		ctx = apicontext.WithAPIContext(ctx, apiCtx)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
-}
-
-func updateLoginStatus(ctx apicontext.CustomContext) {
-
-	var (
-		err    error
-		userID struct {
-			ID primitive.ObjectID `json:"_id" bson:"_id"`
-		}
-	)
-
-	if ctx.RoleID == constant.AdminRole {
-		err = mongolib.ReadOne(constant.MongoDatabaseName, constant.MongoAdminCollection, bson.M{"email": ctx.Email}, &userID)
-	} else {
-		err = mongolib.ReadOne(constant.MongoDatabaseName, constant.MongoUserCollection, bson.M{"email": ctx.Email}, &userID)
-	}
-
-	if err != nil {
-		loglib.GenericError(ctx, fmt.Errorf("mongo call failed, err: %d", err), nil)
-	}
-
-	err = redislib.SetWithExp(constant.LoginExpirationTime, userID.ID.String(), time.Now().Unix())
-	if err != nil {
-		loglib.GenericError(ctx, fmt.Errorf("redis call failed, err: %d", err), nil)
-	}
 }

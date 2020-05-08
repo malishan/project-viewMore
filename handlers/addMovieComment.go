@@ -9,7 +9,6 @@ import (
 	"project/project-viewMore/constant"
 	"project/project-viewMore/core"
 	"project/project-viewMore/mongolib"
-	"project/project-viewMore/redislib"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -20,27 +19,24 @@ func AddMovieComment(w http.ResponseWriter, r *http.Request) {
 	ctx := apicontext.UpgradeContext(r.Context())
 
 	if ctx.RoleID != constant.UserRole {
-		core.ErrorResponse(ctx, w, "user not allowed", http.StatusForbidden, errors.New("user not allowed"), nil)
-		return
-	} else if ctx.UserID == "" {
-		core.ErrorResponse(ctx, w, "userID missing from header", http.StatusBadRequest, errors.New("userID missing from header"), nil)
+		core.ErrorResponse(ctx, w, "only loggedIn user allowed", http.StatusForbidden, errors.New("only loggedIn user allowed"), nil)
 		return
 	}
 
-	_, err := redislib.Get(ctx.UserID)
-	if err != nil {
-		core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
-		return
-	}
+	// _, err := redislib.Get(ctx.UserID)
+	// if err != nil {
+	// 	core.ErrorResponse(ctx, w, "user login required", http.StatusBadRequest, fmt.Errorf("user not loggedIn, err: %v", err), nil)
+	// 	return
+	// }
 
 	var usrComm UserRatingAndComment
 	decodeErr := json.NewDecoder(r.Body).Decode(&usrComm)
 	if decodeErr != nil {
-		core.ErrorResponse(ctx, w, "failed to decode input", http.StatusBadRequest, fmt.Errorf("input decoding failed: %v", decodeErr), nil)
+		core.ErrorResponse(ctx, w, "failed to decode input", http.StatusBadRequest, fmt.Errorf("addComment input decoding failed: %v", decodeErr), nil)
 		return
 	}
 
-	if usrComm.MovieName == "" || usrComm.Comment[0] == "" {
+	if usrComm.MovieName == "" || usrComm.Comment == "" {
 		core.ErrorResponse(ctx, w, "incomplete request body", http.StatusBadRequest, errors.New("movieName or comment missing from request body"), nil)
 		return
 	}
@@ -65,24 +61,20 @@ func AddMovieComment(w http.ResponseWriter, r *http.Request) {
 		filter = bson.M{"name": usrComm.MovieName, "userFeedback.userID": ctx.UserID}
 		update = bson.M{
 			"$set": bson.M{
-				"userFeedback.$.updatedTime": time.Now().UnixNano() / int64(time.Millisecond),
-				"$addToSet":                  bson.M{"userFeedback.userComment": usrComm.Comment},
-			}}
+				"userFeedback.$.updatedTime": time.Now().UnixNano() / int64(time.Millisecond)},
+			"$addToSet": bson.M{"userFeedback.$.userComment": usrComm.Comment},
+		}
 	} else {
 
 		feedback := UserFeedback{
 			UserID:      ctx.UserID,
 			UserEmail:   ctx.Email,
 			UpdatedTime: time.Now().UnixNano() / int64(time.Millisecond),
-			UserComment: []string{usrComm.Comment[0]},
+			UserComment: []string{usrComm.Comment},
 		}
 
 		filter = bson.M{"name": usrComm.MovieName}
-		update = bson.M{
-			"$set": bson.M{
-				"$addToSet": bson.M{
-					"userFeedback": feedback},
-			}}
+		update = bson.M{"$addToSet": bson.M{"userFeedback": feedback}}
 	}
 
 	updateRslt, updateErr := mongolib.Update(constant.MongoDatabaseName, constant.MongoMovieCollection, filter, update)

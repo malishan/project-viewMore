@@ -74,5 +74,13 @@ func StartRoutes() {
 		handlers.SearchMovie,
 	)
 
+	/*---------------------------------Fetch User Feedback-------------------------------*/
+	core.AddRoute(
+		"Fetch User Feedback",
+		http.MethodGet,
+		"/user-feedback",
+		handlers.FetchUserFeedback,
+	)
+
 	core.StartServer(Port, SubRoute)
 }
